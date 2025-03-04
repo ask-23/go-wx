@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Station.Name }} - Weather Station</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>{{ .Station.Name }}</h1>
+            <div class="header-info">
+                <span class="lat-lon">{{ .Station.Location.Latitude }}, {{ .Station.Location.Longitude }}</span>
+                <span class="altitude">{{ .Station.Location.Altitude }} m</span>
+            </div>
+            <div class="tabs">
+                <button class="active">Current</button>
+                <button>Yesterday</button>
+                <button>Week</button>
+                <button>Month</button>
+                <button>Year</button>
+                <button>Archive</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard">
+            <!-- Top row of panels -->
+            <div class="panel">
+                <h2>Outside Temperature</h2>
+                <div class="current-value">{{ printf "%.1f" .Current.Temperature }}°F</div>
+                <div class="high-low">
+                    <span class="high">High: {{ printf "%.1f" .Current.Temperature }}°F</span>
+                    <span class="low">Low: {{ printf "%.1f" .Current.Temperature }}°F</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Outside Humidity</h2>
+                <div class="current-value">{{ printf "%.0f" .Current.Humidity }}%</div>
+                <div class="high-low">
+                    <span class="high">High: {{ printf "%.0f" .Current.Humidity }}%</span>
+                    <span class="low">Low: {{ printf "%.0f" .Current.Humidity }}%</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Barometer</h2>
+                <div class="current-value">{{ printf "%.1f" .Current.Pressure }} mbar</div>
+                <div class="trend">
+                    <span>Falling</span>
+                </div>
+            </div>
+
+            <!-- Second row of panels -->
+            <div class="panel">
+                <h2>Wind Speed</h2>
+                <div class="current-value">{{ printf "%.1f" .Current.WindSpeed }} mph {{ getWindDirection .Current.WindDirection }}</div>
+                <div class="high-low">
+                    <span class="high">High: {{ printf "%.1f" .Current.WindSpeed }} mph</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Wind Chill</h2>
+                <div class="current-value">{{ printf "%.1f" .Current.WindChill }}°F</div>
+                <div class="high-low">
+                    <span class="low">Low: {{ printf "%.1f" .Current.WindChill }}°F</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Heat Index</h2>
+                <div class="current-value">{{ printf "%.1f" .Current.HeatIndex }}°F</div>
+                <div class="high-low">
+                    <span class="high">High: {{ printf "%.1f" .Current.HeatIndex }}°F</span>
+                </div>
+            </div>
+
+            <!-- Third row of panels -->
+            <div class="panel">
+                <h2>Dew Point</h2>
+                <div class="current-value">{{ printf "%.1f" .Current.DewPoint }}°F</div>
+                <div class="high-low">
+                    <span class="high">High: {{ printf "%.1f" .Current.DewPoint }}°F</span>
+                    <span class="low">Low: {{ printf "%.1f" .Current.DewPoint }}°F</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>UV Index</h2>
+                <div class="current-value">{{ printf "%.1f" .Current.UVIndex }}</div>
+                <div class="high-low">
+                    <span class="high">High: {{ printf "%.1f" .Current.UVIndex }}</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Rain</h2>
+                <div class="current-value">{{ printf "%.2f" .Current.Rain }} in</div>
+                <div class="high-low">
+                    <span class="high">Daily: {{ printf "%.2f" .Current.Rain }} in</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart panels -->
+        <div class="charts">
+            <div class="chart-panel">
+                <h2>Outside Temperature</h2>
+                <canvas id="tempChart"></canvas>
+            </div>
+
+            <div class="chart-panel">
+                <h2>Wind Chill</h2>
+                <canvas id="windChillChart"></canvas>
+            </div>
+
+            <div class="chart-panel">
+                <h2>Barometer</h2>
+                <canvas id="barometerChart"></canvas>
+            </div>
+
+            <div class="chart-panel">
+                <h2>Rain</h2>
+                <canvas id="rainChart"></canvas>
+            </div>
+
+            <div class="chart-panel">
+                <h2>Wind Speed</h2>
+                <canvas id="windSpeedChart"></canvas>
+            </div>
+
+            <div class="chart-panel">
+                <h2>Wind Vector</h2>
+                <canvas id="windDirChart"></canvas>
+            </div>
+
+            <div class="chart-panel">
+                <h2>UV Index</h2>
+                <canvas id="uvChart"></canvas>
+            </div>
+
+            <div class="chart-panel">
+                <h2>Outside Humidity</h2>
+                <canvas id="humidityChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Powered by go-wx | Data from Ecowitt GW1000</p>
+    </footer>
+
+    <script src="/static/js/dashboard.js"></script>
+    <script>
+        // Initialize charts with history data
+        const historyData = {{ .History }};
+        initCharts(historyData);
+    </script>
+</body>
+</html> 
