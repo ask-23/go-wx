@@ -1,0 +1,63 @@
+# go-wx Configuration File
+
+# Station configuration
+station:
+  name: "Keller, Texas"
+  location:
+    latitude: 33.05
+    longitude: -97.24
+    altitude: 211  # meters
+  
+# Database configuration
+database:
+  type: "mariadb"  # Options: mariadb, postgres
+  host: "localhost"
+  port: 3306
+  name: "gowx"
+  user: "gowx"
+  password: "gowx_password"
+  
+# Data collection
+collector:
+  type: "interceptor"
+  device:
+    type: "ecowitt"
+    model: "GW1000"
+    address: "192.168.1.100"  # IP address of your GW1000
+    port: 8080                # Port to listen for data
+  interval: 60                # Polling interval in seconds
+
+# Web server
+server:
+  type: "caddy"  # Options: caddy, nginx
+  port: 8080
+  address: "0.0.0.0"  # Listen on all interfaces
+  ssl:
+    enabled: false
+    cert_file: "config/ssl/cert.pem"
+    key_file: "config/ssl/key.pem"
+  
+# Publishers
+publishers:
+  - name: "wunderground"
+    enabled: true
+    station_id: "YOURSTATION"
+    api_key: "YOUR_API_KEY"
+    interval: 300  # seconds
+  
+  # Example of another publisher
+  - name: "custom"
+    enabled: false
+    url: "https://example.com/api/weather"
+    method: "POST"
+    headers:
+      Authorization: "Bearer YOUR_TOKEN"
+    interval: 600  # seconds
+
+# Logging
+logging:
+  level: "info"  # Options: debug, info, warn, error
+  file: "logs/gowx.log"
+  max_size: 10  # MB
+  max_backups: 3
+  max_age: 28  # days 
