@@ -1,0 +1,29 @@
+weather.local {
+    # Enable gzip compression
+    encode gzip
+
+    # Reverse proxy to the go-wx application
+    reverse_proxy go-wx:8080 {
+        # Health checks
+        health_path /api/current
+        health_interval 30s
+        health_timeout 5s
+    }
+
+    # Log requests
+    log {
+        output file /var/log/caddy/weather.log
+    }
+
+    # Handle errors
+    handle_errors {
+        root * /usr/share/caddy/error
+        rewrite * /{http.error.status_code}.html
+        file_server
+    }
+}
+
+# Redirect www to non-www
+www.weather.local {
+    redir https://weather.local{uri} permanent
+} 

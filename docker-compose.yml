@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # The main go-wx application
+  go-wx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go-wx
+    depends_on:
+      - mariadb
+    ports:
+      - "8080:8080"  # Web interface
+      - "8000:8000"  # Interceptor port
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+    restart: unless-stopped
+    environment:
+      - TZ=America/Chicago
+    networks:
+      - go-wx-network
+
+  # MariaDB database for storing weather data
+  mariadb:
+    image: mariadb:10.6
+    container_name: go-wx-db
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=gowx
+      - MYSQL_USER=gowx
+      - MYSQL_PASSWORD=gowx_password
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    networks:
+      - go-wx-network
+
+volumes:
+  mariadb-data:
+    driver: local
+
+networks:
+  go-wx-network:
+    driver: bridge 
