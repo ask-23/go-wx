@@ -1,5 +1,9 @@
 # go-wx: A Simple Go Weather Station
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/ask-23/go-wx)](https://goreportcard.com/report/github.com/ask-23/go-wx)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/ask-23/go-wx)](https://github.com/ask-23/go-wx)
+[![License](https://img.shields.io/github/license/ask-23/go-wx)](https://github.com/ask-23/go-wx/blob/main/LICENSE.md)
+
 A lightweight, high-performance weather monitoring system written in Go. This project was inspired by the amazing [WeeWX](https://github.com/weewx/weewx) project and my experiences configuring, customizing and dockerizing it.
 
 ## Features
