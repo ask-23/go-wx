@@ -3,11 +3,11 @@ package server_test
 import (
 	"testing"
 
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 )
 
 func TestYamlParsing(t *testing.T) {
-	// A simple test to ensure yaml.v3 is working
+	// A simple test to ensure yaml.v2 is working
 	yamlData := []byte(`
 name: test
 value: 123
