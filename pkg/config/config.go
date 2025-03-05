@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 )
 
 // Config represents the main application configuration
@@ -126,6 +126,11 @@ func applyDefaults(config *Config) {
 	// Set default server address if not specified
 	if config.Server.Address == "" {
 		config.Server.Address = "0.0.0.0"
+	}
+
+	// Set default database port if not specified
+	if config.Database.Port == 0 {
+		config.Database.Port = 3306 // Default MySQL/MariaDB port
 	}
 
 	// Set default logging level if not specified
