@@ -1,0 +1,84 @@
+name: Cross-Platform Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  # Run monthly to ensure ongoing compatibility
+  schedule:
+    - cron: '0 0 1 * *'  # First day of each month
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        go-version: ['1.20.x']
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Go ${{ matrix.go-version }}
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+        cache: true
+    
+    - name: Install dependencies
+      run: go mod download
+    
+    - name: Build
+      run: go build -v ./...
+    
+    - name: Test
+      run: go test -v ./...
+
+  # Testing in Alpine Linux container (similar to AWS Alpine)
+  test-alpine:
+    name: Test on Alpine Linux
+    runs-on: ubuntu-latest
+    container: 
+      image: golang:1.20-alpine
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install build dependencies
+      run: apk add --no-cache gcc musl-dev git
+    
+    - name: Install dependencies
+      run: go mod download
+    
+    - name: Build
+      run: go build -v ./...
+    
+    - name: Test
+      run: go test -v ./...
+      
+  # Testing in Amazon Linux container
+  test-amazon-linux:
+    name: Test on Amazon Linux
+    runs-on: ubuntu-latest
+    container:
+      image: amazonlinux:2
+      
+    steps:
+    - name: Install Go and Git
+      run: |
+        yum update -y
+        yum install -y golang git
+        go version
+        
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: go mod download
+      
+    - name: Build
+      run: go build -v ./...
+      
+    - name: Test
+      run: go test -v ./... 
