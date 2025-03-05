@@ -124,63 +124,14 @@ func (i *Interceptor) processEcowittData(form map[string][]string) {
 	}
 
 	// Extract values from the form data
-	// Ecowitt devices typically use keys like "tempf", "humidity", etc.
-
-	// Temperature in Fahrenheit
-	if val, ok := form["tempf"]; ok && len(val) > 0 {
-		if temp, err := strconv.ParseFloat(val[0], 64); err == nil {
-			data.Temperature = temp
-		}
-	}
-
-	// Humidity (0-100%)
-	if val, ok := form["humidity"]; ok && len(val) > 0 {
-		if hum, err := strconv.ParseFloat(val[0], 64); err == nil {
-			data.Humidity = hum
-		}
-	}
-
-	// Barometric pressure in millibars
-	if val, ok := form["baromabsin"]; ok && len(val) > 0 {
-		if pres, err := strconv.ParseFloat(val[0], 64); err == nil {
-			data.Pressure = pres
-		}
-	}
-
-	// Wind speed in mph
-	if val, ok := form["windspeedmph"]; ok && len(val) > 0 {
-		if speed, err := strconv.ParseFloat(val[0], 64); err == nil {
-			data.WindSpeed = speed
-		}
-	}
-
-	// Wind direction in degrees
-	if val, ok := form["winddir"]; ok && len(val) > 0 {
-		if dir, err := strconv.ParseFloat(val[0], 64); err == nil {
-			data.WindDirection = dir
-		}
-	}
-
-	// Rain in inches
-	if val, ok := form["rainratein"]; ok && len(val) > 0 {
-		if rain, err := strconv.ParseFloat(val[0], 64); err == nil {
-			data.Rain = rain
-		}
-	}
-
-	// UV index
-	if val, ok := form["uv"]; ok && len(val) > 0 {
-		if uv, err := strconv.ParseFloat(val[0], 64); err == nil {
-			data.UVIndex = uv
-		}
-	}
-
-	// Cloud base (if available)
-	if val, ok := form["cloudbase"]; ok && len(val) > 0 {
-		if cloud, err := strconv.ParseFloat(val[0], 64); err == nil {
-			data.CloudBase = cloud
-		}
-	}
+	extractFloatParam(form, "tempf", &data.Temperature)
+	extractFloatParam(form, "humidity", &data.Humidity)
+	extractFloatParam(form, "baromabsin", &data.Pressure)
+	extractFloatParam(form, "windspeedmph", &data.WindSpeed)
+	extractFloatParam(form, "winddir", &data.WindDirection)
+	extractFloatParam(form, "rainratein", &data.Rain)
+	extractFloatParam(form, "uv", &data.UVIndex)
+	extractFloatParam(form, "cloudbase", &data.CloudBase)
 
 	// Calculate derived values (dew point, wind chill, heat index)
 	data.CalculateDerivedValues()
@@ -193,5 +144,14 @@ func (i *Interceptor) processEcowittData(form map[string][]string) {
 	// Save to database
 	if err := i.db.SaveWeatherData(data); err != nil {
 		log.Printf("Error saving weather data: %v", err)
+	}
+}
+
+// extractFloatParam safely extracts a float parameter from form data
+func extractFloatParam(form map[string][]string, paramName string, target *float64) {
+	if val, ok := form[paramName]; ok && len(val) > 0 {
+		if parsedVal, err := strconv.ParseFloat(val[0], 64); err == nil {
+			*target = parsedVal
+		}
 	}
 }

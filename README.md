@@ -1,6 +1,6 @@
 # go-wx: A Simple Go Weather Station
 
-[![Go Report Card](https://img.shields.io/badge/go%20report-A%2B-brightgreen?style=flat&logo=go)](https://goreportcard.com/report/github.com/ask-23/go-wx)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ask-23/go-wx)](https://goreportcard.com/report/github.com/ask-23/go-wx)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/ask-23/go-wx)](https://github.com/ask-23/go-wx)
 [![License](https://img.shields.io/github/license/ask-23/go-wx)](https://github.com/ask-23/go-wx/blob/master/LICENSE.md)
 
@@ -11,6 +11,7 @@ A lightweight, high-performance weather monitoring system written in Go. This pr
 - Data collection from Ecowitt GW1000 devices using interceptor methodology
 - Fast, efficient storage with MariaDB/PostgreSQL
 - Colorful and elegant web interface
+- Modern reliability engineering principles: testability, observability, and fault tolerance
 - Simple configuration via YAML files
 - Docker support
 - Pre-configured publishing to Weather Underground with extensible service architecture

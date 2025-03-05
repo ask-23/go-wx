@@ -23,11 +23,11 @@ type Server struct {
 }
 
 // NewServer creates a new web server
-func NewServer(cfg config.ServerConfig, db *database.Database) (*Server, error) {
+func NewServer(cfg config.ServerConfig, stationCfg config.StationConfig, db *database.Database) (*Server, error) {
 	return &Server{
 		config:  &cfg,
 		db:      db,
-		station: &cfg.Station,
+		station: &stationCfg,
 	}, nil
 }
 
