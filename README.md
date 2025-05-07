@@ -1,4 +1,4 @@
-# go-wx: A Simple Go Weather Station
+# go-wx: A modern Go Weather Station
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/ask-23/go-wx)](https://goreportcard.com/report/github.com/ask-23/go-wx)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/ask-23/go-wx)](https://github.com/ask-23/go-wx)
